@@ -116,3 +116,49 @@ ORDER BY total;
   includeLocs: 'dist',
   spherical: false
 }}]
+
+# Conversión de fecha
+[{$addFields: {
+  Date: {
+    $dateFromString: {
+      dateString: '$Update Time',
+      format: '%m/%d/%Y %H:%M'
+    }
+  }
+}
+}, {$project: {
+  yearMonthDayUTC: {
+    $dateToString: {
+      format: '%Y/%m/%d',
+      date: '$Date'
+    }
+  },
+  timewithOffsetNY: {
+    $dateToString: {
+      format: '%H:%M:%S:%L%z',
+      date: '$Date',
+      timezone: 'America/New_York'
+    }
+  },
+  timewithOffset430: {
+    $dateToString: {
+      format: '%H:%M:%S:%L%z',
+      date: '$Date',
+      timezone: '+04:30'
+    }
+  },
+  minutesOffsetNY: {
+    $dateToString: {
+      format: '%Z',
+      date: '$Date',
+      timezone: 'America/New_York'
+    }
+  },
+  minutesOffset430: {
+    $dateToString: {
+      format: '%Z',
+      date: '$Date',
+      timezone: '+04:30'
+    }
+  }
+}}]
